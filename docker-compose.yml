@@ -56,7 +56,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: observer
-      POSTGRES_PASSWORD: BYT_TILL_DITT_LOSENORD
+      POSTGRES_PASSWORD: Hkby1983
       POSTGRES_DB: lorawan_observations
     volumes:
       - observerdata:/var/lib/postgresql/data
