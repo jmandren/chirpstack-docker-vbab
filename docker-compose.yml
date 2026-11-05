@@ -51,6 +51,17 @@ services:
     volumes:
       - /home/vbabadmin/lorawan-poc/configuration/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
 
+  observer-postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: observer
+      POSTGRES_PASSWORD: BYT_TILL_DITT_LOSENORD
+      POSTGRES_DB: lorawan_observations
+    volumes:
+      - observerdata:/var/lib/postgresql/data
+      - /home/vbabadmin/lorawan-poc/observer/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+
   observer:
     image: python:3.13-slim
     restart: unless-stopped
