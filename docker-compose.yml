@@ -68,7 +68,7 @@ services:
     working_dir: /app
     command: >
       sh -c "pip install --no-cache-dir paho-mqtt psycopg2-binary &&
-             python observer.py"
+             python -u observer.py"
     environment:
       MQTT_HOST: mosquitto
       MQTT_PORT: "1883"
