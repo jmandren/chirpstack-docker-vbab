@@ -51,16 +51,25 @@ services:
     volumes:
       - /home/vbabadmin/lorawan-poc/configuration/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
 
-  observer-postgres:
-    image: postgres:16-alpine
+  observer:
+    image: python:3.13-slim
     restart: unless-stopped
+    working_dir: /app
+    command: >
+      sh -c "pip install --no-cache-dir paho-mqtt psycopg2-binary &&
+             python observer.py"
     environment:
-      POSTGRES_USER: observer
-      POSTGRES_PASSWORD: Hkby1983
-      POSTGRES_DB: lorawan_observations
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      DB_HOST: observer-postgres
+      DB_NAME: lorawan_observations
+      DB_USER: observer
+      DB_PASSWORD: Hkby1983
     volumes:
-      - observerdata:/var/lib/postgresql/data
-      - /home/vbabadmin/lorawan-poc/observer/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+      - /home/vbabadmin/lorawan-poc/observer/observer.py:/app/observer.py:ro
+    depends_on:
+      - mosquitto
+      - observer-postgres
 
 volumes:
   postgresqldata:
