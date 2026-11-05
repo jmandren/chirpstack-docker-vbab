@@ -70,7 +70,7 @@ services:
       sh -c "pip install --no-cache-dir paho-mqtt psycopg2-binary &&
              python -u observer.py"
     environment:
-      MQTT_HOST: mosquitto
+      MQTT_HOST: lorawan-mosquitto
       MQTT_PORT: "1883"
       DB_HOST: observer-postgres
       DB_NAME: lorawan_observations
