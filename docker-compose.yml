@@ -6,13 +6,13 @@ services:
     volumes:
       - /home/vbabadmin/lorawan-poc/configuration/chirpstack:/etc/chirpstack:ro
     depends_on:
-      - postgres
-      - mosquitto
-      - redis
+      - lorawan-postgres
+      - lorawan-mosquitto
+      - lorawan-redis
     environment:
-      - MQTT_BROKER_HOST=mosquitto
-      - REDIS_HOST=redis
-      - POSTGRESQL_HOST=postgres
+      - MQTT_BROKER_HOST=lorawan-mosquitto
+      - REDIS_HOST=lorawan-redis
+      - POSTGRESQL_HOST=lorawan-postgres
     ports:
       - "5017:8080"
 
@@ -25,7 +25,7 @@ services:
     depends_on:
       - chirpstack
 
-  postgres:
+  lorawan-postgres:
     image: postgres:14-alpine
     restart: unless-stopped
     volumes:
@@ -36,14 +36,14 @@ services:
       - POSTGRES_PASSWORD=chirpstack
       - POSTGRES_DB=chirpstack
 
-  redis:
+  lorawan-redis:
     image: redis:7-alpine
     restart: unless-stopped
     command: redis-server --save 300 1 --save 60 100 --appendonly no
     volumes:
       - redisdata:/data
 
-  mosquitto:
+  lorawan-mosquitto:
     image: eclipse-mosquitto:2
     restart: unless-stopped
     ports:
@@ -79,7 +79,7 @@ services:
     volumes:
       - /home/vbabadmin/lorawan-poc/observer/observer.py:/app/observer.py:ro
     depends_on:
-      - mosquitto
+      - lorawan-mosquitto
       - observer-postgres
 
 volumes:
