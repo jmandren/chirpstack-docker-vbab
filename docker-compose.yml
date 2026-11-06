@@ -77,7 +77,7 @@ services:
       DB_USER: observer
       DB_PASSWORD: Hkby1983
     volumes:
-      - /home/vbabadmin/lorawan-poc/observer/observer.py:/app/observer.py:ro
+        - /home/vbabadmin/lorawan-poc/observer:/app:ro
     depends_on:
       - lorawan-mosquitto
       - observer-postgres
