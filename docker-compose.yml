@@ -67,7 +67,7 @@ services:
     restart: unless-stopped
     working_dir: /app
     command: >
-      sh -c "pip install --no-cache-dir paho-mqtt psycopg2-binary cryptography &&
+      sh -c "pip install --no-cache-dir paho-mqtt psycopg2-binary cryptography openpyxl &&
              python -u observer.py"
     environment:
       MQTT_HOST: lorawan-mosquitto
