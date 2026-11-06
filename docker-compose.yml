@@ -86,19 +86,38 @@ services:
     image: python:3.13-slim
     restart: unless-stopped
     working_dir: /app
-
     command: sh -c "pip install --no-cache-dir psycopg2-binary cryptography && python -u verify_worker.py"
+    environment:
+      DB_HOST: observer-postgres
+      DB_NAME: lorawan_observations
+      DB_USER: observer
+      DB_PASSWORD: Hkby1983
+    volumes:
+      - /home/vbabadmin/lorawan-poc/observer:/app:ro
+    depends_on:
+      - observer-postgres
+      
+  chirpstack-ingestor:
+    image: python:3.13-slim
+    restart: unless-stopped
+    working_dir: /app
+
+    command: sh -c "pip install --no-cache-dir paho-mqtt psycopg2-binary && python -u ingestor.py"
 
     environment:
+      MQTT_HOST: lorawan-mosquitto
+      MQTT_PORT: "1883"
+
       DB_HOST: observer-postgres
       DB_NAME: lorawan_observations
       DB_USER: observer
       DB_PASSWORD: Hkby1983
 
     volumes:
-      - /home/vbabadmin/lorawan-poc/observer:/app:ro
+      - /home/vbabadmin/lorawan-poc/ingestor:/app:ro
 
     depends_on:
+      - lorawan-mosquitto
       - observer-postgres
 
 volumes:
